@@ -21,6 +21,7 @@ export const login = async ( {email, password} ) => {
 };
 
 export const register = async (userData)=> {
+    
     if(userData.password !== userData.rePassword){
         throw new Error("Password missmatch!");
         
