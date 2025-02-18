@@ -38,6 +38,11 @@ const electronic = await electronicService.getOne(electronicId);
 const isOwner = req.user && req.user._id === electronic.owner.toString();
     res.render('electronics/details', {electronic, isOwner})
 });
+electronicController.get('/:electronicId/edit',isAuth, async (req,res)=>{
+    const electronicId = req.params.electronicId;
+    const electronic = await electronicService.getOne(electronicId);
+    res.render('electronics/edit', {electronic})
+});
 
 
 
