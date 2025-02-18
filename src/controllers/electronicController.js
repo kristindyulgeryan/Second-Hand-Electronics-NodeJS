@@ -30,6 +30,13 @@ console.log(newElectronic)
     }
    
     res.redirect('/electronics/catalog')
+});
+
+electronicController.get('/:electronicId/details', async (req,res)=>{
+    const electronicId = req.params.electronicId;
+const electronic = await electronicService.getOne(electronicId);
+
+    res.render('electronics/details', {electronic})
 })
 
 export default electronicController;
