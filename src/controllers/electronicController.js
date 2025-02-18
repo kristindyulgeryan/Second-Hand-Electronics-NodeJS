@@ -45,6 +45,19 @@ electronicController.get('/:electronicId/edit',isAuth, async (req,res)=>{
 });
 
 
+electronicController.post('/:electronicId/edit',isAuth, async (req,res)=>{
+    const electronicId = req.params.electronicId;
+    const updatedElectronic = req.body;
+    try {
+        await electronicService.update(electronicId, updatedElectronic);
+    } catch (err) {
+        const error = getErrorMessage(err);
+        return res.render('electronics/edit', {
+            electronic: updatedElectronic,
+            error});
+    }
+    res.redirect(`/electronics/${electronicId}/details`)
+})
 
 
 export default electronicController;

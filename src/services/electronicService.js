@@ -15,5 +15,8 @@ async getOne(electronicId){
        return await  Electronic.create({...electronicData, owner: userId});
       
     },
+    async update(electronicId, electronicData){
+        return await Electronic.findByIdAndUpdate(electronicId, electronicData, {runValidators: true});
+    }
    
 }
