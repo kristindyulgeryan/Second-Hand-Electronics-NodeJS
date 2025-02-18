@@ -23,7 +23,7 @@ authController.post('/login', isGuest, async (req, res)=>{
     } catch (err) {
         res.render('auth/login', {
             error: getErrorMessage(err), 
-            user: { email}})
+            username: { email }})
     }
     
 });
@@ -43,7 +43,10 @@ try {
     res.cookie(AUTH_COOKIE_NAME, token, {httpOnly: true})
     res.redirect('/')
 } catch (err) {
-    res.render('auth/register', {username, email, error: getErrorMessage(err)});
+    res.render('auth/register', {
+         
+        username: {username, email},
+        error: getErrorMessage(err)});
 }
  
 
