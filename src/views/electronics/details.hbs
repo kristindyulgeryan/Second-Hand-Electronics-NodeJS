@@ -16,23 +16,25 @@
                     <h2>Price: ${{electronic.price}}</h2>
                 </div> 
                 
-{{#if user}}
+           {{#if user}}
                 <!--If there is user logged in-->
                 <div class="buttons">
                  {{#if isOwner}}
                   <!--If user is owner-->
                     <a href="/electronics/{{electronic._id}}/edit" class="edit-btn">Edit</a>
                     <a href="/electronics/{{electronic._id}}/delete" class="delete-btn">Delete</a>
-                    {{else}}
+            {{else}}
                     
-       {{#if isBought}}
+                   {{#if isBought}}
+                    <!--If user is not owner of the toy post-->
+                    <a href="/electronics/{{electronic._id}}/buy" class="buy-btn">Buy</a>
+                    {{else}}
                     <!--If user is not the owner and is bought this toy-->
                     <p><span class="buy">Thank You For Your Purchase</span></p>
-                     {{else}}
-                     <!--If user is not owner of the toy post-->
-                    <a href="/electronics/{{electronic._id}}/buy" class="buy-btn">Buy</a>
+                     
                     {{/if}}
                     {{/if}}
+                    
                 </div>
          
                {{/if}}

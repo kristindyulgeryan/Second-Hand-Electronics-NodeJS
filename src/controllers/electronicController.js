@@ -2,9 +2,17 @@ import { Router } from "express";
 import electronicService from "../services/electronicService.js";
 import { getErrorMessage } from "../utils/errorUtils.js";
 import { isAuth } from "../middlewares/authMiddleware.js";
+import { get } from "mongoose";
 
 
 const electronicController=Router();
+
+electronicController.get('/search', async (req,res)=>{
+    const filter=req.query;
+    const electronics = await electronicService.getAll(filter);
+
+    res.render('search', {electronics, filter})
+})
 
 electronicController.get('/catalog', async (req,res)=>{
     const electronics =await electronicService.getAll();
@@ -35,14 +43,34 @@ console.log(newElectronic)
 electronicController.get('/:electronicId/details', async (req,res)=>{
     const electronicId = req.params.electronicId;
 const electronic = await electronicService.getOne(electronicId);
-const isOwner = req.user && req.user._id === electronic.owner.toString();
-    res.render('electronics/details', {electronic, isOwner})
+
+
+const isOwner = req.user && electronic.owner.equals(req.user._id.toString());
+const isBought =  electronic.buyingList.includes(req.user?._id)
+    res.render('electronics/details', {electronic, isOwner, isBought})
 });
+
+electronicController.get('/:electronicId/buy',isAuth, async (req,res)=>{
+    const electronciId = req.params.electronicId;
+    const userId = req.user._id;
+
+    try {
+        await electronicService.buy(electronciId, userId);
+       
+    } catch (err) {
+       
+     res.setError(getErrorMessage(err)); 
+    }
+    
+    res.redirect(`/electronics/${electronciId}/details`)
+ })
+
 electronicController.get('/:electronicId/edit',isAuth, async (req,res)=>{
     const electronicId = req.params.electronicId;
     const electronic = await electronicService.getOne(electronicId);
     res.render('electronics/edit', {electronic})
 });
+
 
 
 electronicController.post('/:electronicId/edit',isAuth, async (req,res)=>{
@@ -57,7 +85,14 @@ electronicController.post('/:electronicId/edit',isAuth, async (req,res)=>{
             error});
     }
     res.redirect(`/electronics/${electronicId}/details`)
+});
+
+electronicController.get('/:electronicId/delete',isAuth, async (req,res)=>{
+    const electronicId = req.params.electronicId;
+    await electronicService.deleteOne(electronicId);
+    res.redirect('/electronics/catalog')
 })
+
 
 
 export default electronicController;
