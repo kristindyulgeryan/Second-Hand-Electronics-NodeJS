@@ -35,8 +35,11 @@ console.log(newElectronic)
 electronicController.get('/:electronicId/details', async (req,res)=>{
     const electronicId = req.params.electronicId;
 const electronic = await electronicService.getOne(electronicId);
+const isOwner = req.user && req.user._id === electronic.owner.toString();
+    res.render('electronics/details', {electronic, isOwner})
+});
 
-    res.render('electronics/details', {electronic})
-})
+
+
 
 export default electronicController;
