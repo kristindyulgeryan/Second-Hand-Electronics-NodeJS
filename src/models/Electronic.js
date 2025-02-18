@@ -32,10 +32,10 @@ const electronicSchema = new Schema ({
         type: Number,
         required: [true, 'Price is required']
     },
-    buyingList: {
+    buyingList: [{
         type: Types.ObjectId,
         ref: 'User'
-    },
+    }],
     owner: {
         type: Types.ObjectId,
         ref: 'User'
